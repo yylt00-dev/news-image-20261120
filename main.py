@@ -35,7 +35,10 @@ def main():
     blob = read_entry(here / SOURCE)
     out_dir = Path(environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / SOURCE).write_bytes(blob)
+    target = out_dir / SOURCE
+    target.write_bytes(blob)
+    if target.read_bytes() != blob:
+        fail(f"{target} does not match {SOURCE} after writing")
 
 
 if __name__ == "__main__":
